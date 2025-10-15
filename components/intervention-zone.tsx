@@ -8,7 +8,6 @@ export default function InterventionZone() {
     <section id="zone" className="py-24 bg-background">
       <div className="container mx-auto px-4 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          {/* Left Content */}
           <div>
             <h2 className="text-4xl md:text-5xl font-bold text-primary mb-6 text-balance">Zone d'intervention</h2>
             <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
@@ -49,7 +48,6 @@ export default function InterventionZone() {
             </Card>
           </div>
 
-          {/* Right Content - Map Placeholder */}
           <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
             <div className="absolute inset-0 bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
               <div className="text-center">
@@ -58,7 +56,7 @@ export default function InterventionZone() {
                 <p className="text-lg text-muted-foreground mt-2">Yvelines • Essonne</p>
               </div>
             </div>
-            {/* Decorative elements */}
+
             <div className="absolute top-10 left-10 w-4 h-4 bg-primary rounded-full animate-pulse" />
             <div className="absolute top-20 right-20 w-3 h-3 bg-accent rounded-full animate-pulse delay-100" />
             <div className="absolute bottom-20 left-20 w-5 h-5 bg-primary rounded-full animate-pulse delay-200" />

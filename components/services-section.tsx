@@ -52,14 +52,14 @@ export default function ServicesSection() {
         gsap.fromTo(
           card,
           {
-            x: index < 3 ? -200 : 200, // First 3 cards from left, last 3 from right
+            x: index < 3 ? -500 : 500,
             opacity: 0,
           },
           {
             x: 0,
             opacity: 1,
             duration: 1,
-            ease: "power3.out",
+            ease: "power1.out",
             scrollTrigger: {
               trigger: card,
               start: "top 80%",

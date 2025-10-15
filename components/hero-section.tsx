@@ -2,13 +2,16 @@
 
 import { Button } from "@/components/ui/button"
 import { Phone, Clock, MapPin } from "lucide-react"
-import { Canvas } from "@react-three/fiber"
-import { OrbitControls, Float, Environment } from "@react-three/drei"
+import { OrbitControls, Float } from "@react-three/drei"
 import { useEffect, useState } from "react"
 import LockModel from "./lock-model"
+import HybridCanvas from "./hybrid-canvas"
+import WebGPUInfo from "./webgpu-info"
+
 
 export default function HeroSection() {
   const [scrollY, setScrollY] = useState(0)
+  const [_, setIsLowMemory] = useState(false)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,23 +21,41 @@ export default function HeroSection() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
+  useEffect(() => {
+    const checkMemory = () => {
+      if ('deviceMemory' in navigator) {
+        const deviceMemory = (navigator as any).deviceMemory
+        if (deviceMemory && deviceMemory < 4) {
+          setIsLowMemory(true)
+        }
+      }
+      
+      if (window.innerWidth < 768) {
+        setIsLowMemory(true)
+      }
+    }
+    
+    checkMemory()
+  }, [])
+
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-primary via-primary/95 to-primary/90">
-      {/* 3D Background */}
-      <div className="absolute inset-0 opacity-40">
-        <Canvas camera={{ position: [0, 0, 15], fov: 50 }}>
-          <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} intensity={1} />
-          <pointLight position={[-10, -10, -10]} intensity={0.5} />
-          <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
-            <LockModel rotation={[0, scrollY * 0.005, 0]} />
-          </Float>
-          <OrbitControls enableZoom={false} enablePan={false} autoRotateSpeed={0.5} />
-          <Environment preset="city" />
-        </Canvas>
-      </div>
+      <WebGPUInfo />
+       <div className="absolute inset-0 opacity-40">
+         <HybridCanvas 
+           camera={{ position: [0, 0, 15], fov: 50 }}
+           dpr={[1, 2]}
+           performance={{ min: 0.5 }}
+         >
+           <ambientLight intensity={7} />
+           <pointLight position={[-10, -10, -10]} intensity={10} />
+           <Float speed={1.5} rotationIntensity={0.5} floatIntensity={0.5}>
+             <LockModel rotation={[0, scrollY * 0.005, 0]} />
+           </Float>
+           <OrbitControls enableZoom={false} enablePan={false} autoRotateSpeed={0.5} />
+         </HybridCanvas>
+       </div>
 
-      {/* Content */}
       <div className="container mx-auto px-4 lg:px-8 relative z-10 pt-20">
         <div className="max-w-4xl mx-auto text-center">
           <div className="animate-fadeInUp">
@@ -47,8 +68,7 @@ export default function HeroSection() {
             </p>
           </div>
 
-          {/* Key Features */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fadeInUp">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12 animate-fadeInUp ">
             <div className="bg-white/10 backdrop-blur-md rounded-lg p-6 border border-white/20">
               <Clock className="h-8 w-8 text-white mb-3 mx-auto" />
               <h3 className="text-white font-semibold mb-2">Disponible 24/7</h3>
@@ -66,7 +86,6 @@ export default function HeroSection() {
             </div>
           </div>
 
-          {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center animate-fadeInUp">
             <Button asChild size="lg" className="bg-white text-primary hover:bg-white/90 text-lg px-8 py-6">
               <a href="tel:0744897125">
@@ -91,7 +110,6 @@ export default function HeroSection() {
         </div>
       </div>
 
-      {/* Scroll Indicator */}
       <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce">
         <div className="w-6 h-10 border-2 border-white/50 rounded-full flex items-start justify-center p-2">
           <div className="w-1 h-3 bg-white/50 rounded-full" />
